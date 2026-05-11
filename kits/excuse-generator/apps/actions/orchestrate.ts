@@ -25,10 +25,10 @@ export async function orchestrateFlow(
 }> {
     try {
 
-        const workflowId = process.env.Flow_ID;
+        const workflowId = process.env.LAMATIC_FLOW_ID;
 
         if (!workflowId) {
-            throw new Error("Flow_ID is not set in environment variables. Please check your .env.local file.");
+            throw new Error("LAMATIC_FLOW_ID is not set in environment variables. Please check your .env.local file.");
         }
 
         const inputs: Record<string, any> = {

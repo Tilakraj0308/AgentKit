@@ -8,7 +8,7 @@
 
 **Agent Kit Excuse Generator** is an AI-powered excuse generation system built with [Lamatic.ai](https://lamatic.ai). It uses intelligent workflows to generate personalized excuses based on the situation and person, through a modern Next.js interface. It remembers your personal context and the excuse history so that you don't repeat the same excuses for a person.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lamatic/AgentKit&root-directory=kits/excuse-generator/apps&env=Flow_ID,LAMATIC_API_URL,LAMATIC_PROJECT_ID,LAMATIC_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Lamatic/AgentKit&root-directory=kits/excuse-generator/apps&env=LAMATIC_FLOW_ID,LAMATIC_API_URL,LAMATIC_PROJECT_ID,LAMATIC_API_KEY)
 
 ---
 
@@ -64,7 +64,7 @@ Then configure the required keys in `apps/.env.local`:
 
 ```bash
 # Lamatic
-Flow_ID = "Excuse Generator Flow ID"
+LAMATIC_FLOW_ID = "Excuse Generator Flow ID"
 LAMATIC_API_URL = "LAMATIC_API_URL"
 LAMATIC_PROJECT_ID = "LAMATIC_PROJECT_ID"
 LAMATIC_API_KEY = "LAMATIC_API_KEY"

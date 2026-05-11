@@ -36,7 +36,7 @@ This kit is designed to turn a brief user prompt (e.g., "I'm late for dinner") i
 - Dependencies
   - LLM provider configured for the flow.
   - Environment:
-    - `Flow_ID` — Flow ID used by the app/router.
+    - `LAMATIC_FLOW_ID` — Flow ID used by the app/router.
     - `LAMATIC_API_URL`, `LAMATIC_PROJECT_ID`, `LAMATIC_API_KEY` — to invoke the deployed flow.
 
 ## Guardrails
@@ -61,7 +61,7 @@ This kit is designed to turn a brief user prompt (e.g., "I'm late for dinner") i
 - `LAMATIC_API_URL` — Base URL for the Lamatic API; required by the Next.js app.
 - `LAMATIC_PROJECT_ID` — Lamatic project identifier; required for all flow invocations.
 - `LAMATIC_API_KEY` — Lamatic API key with permission to invoke deployed flows.
-- `Flow_ID` — Flow ID for the Excuse Generator flow; used by the app to invoke the generation logic.
+- `LAMATIC_FLOW_ID` — Flow ID for the Excuse Generator flow; used by the app to invoke the generation logic.
 - `lamatic.config.ts` — Declares kit metadata, step gating rules, and links; used for publishing/deploying the kit.
 
 ## Quickstart
@@ -69,7 +69,7 @@ This kit is designed to turn a brief user prompt (e.g., "I'm late for dinner") i
    - In Lamatic: create/select a project → “+ New Flow” → Templates → select “Excuse Generator” → configure providers/tools → deploy.
 2. Populate `apps/.env.local` from `apps/.env.example`
    - Set `LAMATIC_API_URL`, `LAMATIC_PROJECT_ID`, `LAMATIC_API_KEY`.
-   - Set `Flow_ID` to the deployed Lamatic Flow ID.
+   - Set `LAMATIC_FLOW_ID` to the deployed Lamatic Flow ID.
 3. Start the app locally
    - `cd apps`
    - `npm install`
@@ -80,7 +80,7 @@ This kit is designed to turn a brief user prompt (e.g., "I'm late for dinner") i
 | Symptom | Likely Cause | Fix |
 |---|---|---|
 | Flow invocation returns network error | Missing/invalid `LAMATIC_API_KEY` or wrong project | Verify `LAMATIC_PROJECT_ID` and API keys, update `.env.local` |
-| App gets “Flow_ID is not set” | Missing `Flow_ID` in env vars | Copy the deployed Flow ID from Lamatic Studio into `.env.local` |
+| App gets “LAMATIC_FLOW_ID is not set” | Missing `LAMATIC_FLOW_ID` in env vars | Copy the deployed Flow ID from Lamatic Studio into `.env.local` |
 | Responses take too long or timeout | Async flow processing delays | Ensure polling logic in `orchestrate.ts` is handling requestId correctly |
 
 ## Notes
