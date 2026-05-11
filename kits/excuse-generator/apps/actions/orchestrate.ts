@@ -40,18 +40,14 @@ export async function orchestrateFlow(
             selectedPerson: input.selectedPerson,
         };
 
-        console.log("[orchestrate] Sending inputs:", inputs);
 
         const resData = await lamaticClient.executeFlow(workflowId, inputs);
-        console.log("[orchestrate] Raw response:", JSON.stringify(resData, null, 2));
 
         let answer: any;
 
         // Check if the flow is async (returns a requestId instead of the answer)
         if (resData?.result?.requestId) {
-            console.log("[orchestrate] Async flow detected, polling with requestId:", resData.result.requestId);
             const statusData = await lamaticClient.checkStatus(resData.result.requestId);
-            console.log("[orchestrate] Status response (full):", JSON.stringify(statusData, null, 2));
 
             if (statusData.status === "error") {
                 throw new Error(statusData.message || "Flow execution failed");
@@ -59,7 +55,6 @@ export async function orchestrateFlow(
 
             // Extract from async status response: data.output.result contains the flow output
             const flowOutput = (statusData as any)?.data?.output?.result;
-            console.log("[orchestrate] Flow output:", JSON.stringify(flowOutput, null, 2));
             answer = flowOutput;
         } else {
             answer = resData?.result;
@@ -96,8 +91,6 @@ export async function orchestrateFlow(
             }
         }
 
-        console.log("[orchestrate] Response node:", JSON.stringify(responseNode, null, 2));
-        console.log("[orchestrate] SelectionConfirmed node:", JSON.stringify(selectionConfirmedNode, null, 2));
 
         // Build the data to return — include both response and selectionConfirmed
         const data: any = {};
@@ -128,7 +121,6 @@ export async function orchestrateFlow(
             data,
         };
     } catch (error) {
-        console.error("[orchestrate] Generation error:", error);
 
         let errorMessage = "Unknown error occurred";
         if (error instanceof Error) {
