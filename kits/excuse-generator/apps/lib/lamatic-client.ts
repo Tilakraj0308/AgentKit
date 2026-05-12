@@ -6,7 +6,7 @@ if (!process.env.LAMATIC_API_URL || !process.env.LAMATIC_PROJECT_ID || !process.
     );
 }
 export const lamaticClient = new Lamatic({
-    endpoint: process.env.LAMATIC_API_URL ?? "",
-    projectId: process.env.LAMATIC_PROJECT_ID ?? null,
-    apiKey: process.env.LAMATIC_API_KEY ?? ""
+    endpoint: process.env.LAMATIC_API_URL as string,
+    projectId: process.env.LAMATIC_PROJECT_ID as string,
+    apiKey: process.env.LAMATIC_API_KEY as string
 });
