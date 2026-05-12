@@ -15,6 +15,15 @@ type ChatMessage = {
   selectedOption?: string; // track which option was selected
 };
 
+const buildChatHistory = (chatLog: ChatMessage[]) => {
+  return chatLog
+    .filter((m) => m.id !== "welcome" && (m.role === "user" || m.type === "text" || m.type === "done"))
+    .map((m) => ({
+      role: m.role === "user" ? "user" : "assistant",
+      content: m.text,
+    }));
+};
+
 export default function ChatPage() {
   const [users, setUsers] = useState<Record<string, string>>({});
   const [selectedUser, setSelectedUser] = useState<string | null>(null);
@@ -154,12 +163,7 @@ export default function ChatPage() {
     if (!userMessage.trim()) return;
 
     // Build chatHistory as {role, content} objects for the Lamatic InstructorLLMNode
-    const chatHistory = chatLog
-      .filter((m) => m.id !== "welcome" && (m.role === "user" || m.type === "text" || m.type === "done"))
-      .map((m) => ({
-        role: m.role === "user" ? "user" : "assistant",
-        content: m.text,
-      }));
+    const chatHistory = buildChatHistory(chatLog);
 
     // Append the current message to the end of the history so the LLM knows it's the latest turn
     chatHistory.push({
@@ -282,12 +286,7 @@ export default function ChatPage() {
       abortControllerRef.current = controller;
 
       // Build chatHistory as {role, content} objects for the Lamatic InstructorLLMNode
-      const chatHistory = chatLog
-        .filter((m) => m.id !== "welcome" && (m.role === "user" || m.type === "text" || m.type === "done"))
-        .map((m) => ({
-          role: m.role === "user" ? "user" : "assistant",
-          content: m.text,
-        }));
+      const chatHistory = buildChatHistory(chatLog);
 
       const res = await fetch("/api/chat", {
         method: "POST",
