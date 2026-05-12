@@ -6,6 +6,13 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { sessionId, message, messageType, chatHistory, selectedExcuse, selectedPerson } = body;
 
+    if (!sessionId || typeof sessionId !== 'string' || sessionId.trim() === '') {
+      return NextResponse.json(
+        { error: "Invalid request: sessionId is required and must be a non-empty string." },
+        { status: 400 }
+      );
+    }
+
     // Call the Lamatic flow via our server action SDK wrapper
     const result = await orchestrateFlow({
       sessionId,
