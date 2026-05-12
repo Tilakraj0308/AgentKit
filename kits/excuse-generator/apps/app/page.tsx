@@ -39,7 +39,6 @@ export default function ChatPage() {
         const storedUsers = JSON.parse(storedUsersStr);
         setUsers(storedUsers);
       } catch (e) {
-        console.error("Failed to parse stored users", e);
       }
     }
 
@@ -247,7 +246,6 @@ export default function ChatPage() {
     } catch (err: any) {
       // Silently ignore aborted requests (user clicked New Chat)
       if (err?.name === "AbortError") return;
-      console.error(err);
       setChatLog((prev) => [
         ...prev,
         {
@@ -322,7 +320,6 @@ export default function ChatPage() {
     } catch (err: any) {
       // Silently ignore aborted requests (user clicked New Chat)
       if (err?.name === "AbortError") return;
-      console.error(err);
       setChatLog((prev) => [
         ...prev,
         {

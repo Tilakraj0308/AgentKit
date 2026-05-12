@@ -5,7 +5,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { sessionId, message, messageType, chatHistory, selectedExcuse, selectedPerson } = body;
-    
+
     // Call the Lamatic flow via our server action SDK wrapper
     const result = await orchestrateFlow({
       sessionId,
@@ -19,11 +19,10 @@ export async function POST(req: Request) {
     if (!result.success) {
       // Mock response for development if missing credentials
       if (process.env.NODE_ENV === 'development' && result.error?.includes('credentials')) {
-        console.log("Mocking SDK response due to missing credentials.");
         return NextResponse.json({
           response: {
             type: selectedExcuse ? "question" : "options",
-            message: selectedExcuse 
+            message: selectedExcuse
               ? `Generating an excuse based on: ${selectedExcuse}... Here is your excuse: "I'm sorry, I was unexpectedly trapped in a time loop!"`
               : "What kind of excuse do you need today?",
             items: selectedExcuse ? [] : ["Work", "Social Event", "Family Gathering", "Other"],
@@ -42,9 +41,8 @@ export async function POST(req: Request) {
     return NextResponse.json(result.data);
 
   } catch (error: any) {
-    console.error("API proxy error:", error);
     return NextResponse.json(
-      { error: "Failed to process chat message" }, 
+      { error: "Failed to process chat message" },
       { status: 500 }
     );
   }

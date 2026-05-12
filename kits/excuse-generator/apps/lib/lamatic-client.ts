@@ -5,11 +5,6 @@ if (!process.env.LAMATIC_API_URL || !process.env.LAMATIC_PROJECT_ID || !process.
         "All API Credentials in environment variable are not set. Please add it to your .env.local file."
     );
 }
-console.log("*************************************************************")
-console.log(process.env.LAMATIC_API_URL)
-console.log(process.env.LAMATIC_PROJECT_ID)
-console.log(process.env.LAMATIC_API_KEY)
-console.log("*************************************************************")
 export const lamaticClient = new Lamatic({
     endpoint: process.env.LAMATIC_API_URL ?? "",
     projectId: process.env.LAMATIC_PROJECT_ID ?? null,

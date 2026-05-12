@@ -41,16 +41,49 @@ export async function orchestrateFlow(
         };
 
 
-        const resData = await lamaticClient.executeFlow(workflowId, inputs);
+        // Wrap executeFlow with a 60-second timeout to prevent indefinite hangs
+        const executeFlowPromise = lamaticClient.executeFlow(workflowId, inputs);
+        const timeoutPromise = new Promise<any>((_, reject) => {
+            setTimeout(() => reject(new Error("Flow execution timed out")), 60000);
+        });
+
+        const resData = await Promise.race([executeFlowPromise, timeoutPromise]);
 
         let answer: any;
 
         // Check if the flow is async (returns a requestId instead of the answer)
         if (resData?.result?.requestId) {
-            const statusData = await lamaticClient.checkStatus(resData.result.requestId);
+            const requestId = resData.result.requestId;
+            let statusData: any;
+            let isComplete = false;
+            
+            // Polling loop with bounded retries and exponential backoff
+            let retries = 0;
+            const maxRetries = 6;
+            let delay = 2000; // Initial delay of 2 seconds
 
-            if (statusData.status === "error") {
-                throw new Error(statusData.message || "Flow execution failed");
+            while (retries < maxRetries) {
+                // Use a pollTimeout of 10s for the checkStatus call
+                statusData = await lamaticClient.checkStatus(requestId, undefined, 10000);
+
+                if (statusData?.status === "error") {
+                    throw new Error(statusData.message || "Flow execution failed");
+                }
+
+                if (statusData?.status === "success" || statusData?.status === "completed" || (statusData as any)?.data?.output?.result) {
+                    isComplete = true;
+                    break;
+                }
+
+                retries++;
+                if (retries < maxRetries) {
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // Exponential backoff (2s, 4s, 8s, 16s, 32s...)
+                }
+            }
+
+            if (!isComplete) {
+                throw new Error("Flow execution timed out after multiple polling attempts");
             }
 
             // Extract from async status response: data.output.result contains the flow output
