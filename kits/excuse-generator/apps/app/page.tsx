@@ -96,7 +96,10 @@ export default function ChatPage() {
       return;
     }
 
-    const newId = Math.random().toString(36).substring(2, 15);
+    if (typeof crypto === 'undefined' || !crypto.randomUUID) {
+      throw new Error("Secure random UUID generation is not supported in this environment");
+    }
+    const newId = crypto.randomUUID();
     const updatedUsers = { ...users, [name]: newId };
     setUsers(updatedUsers);
     localStorage.setItem("excusebot_users", JSON.stringify(updatedUsers));
